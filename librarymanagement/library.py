@@ -17,7 +17,8 @@ class SDACourseTrackingSystem:
         self.last_name_var = StringVar()
         self.course_name_var = StringVar()
         self.course_module_var = StringVar()
-        self.study_date = StringVar()
+        self.study_date_var = StringVar()
+        self.study_hours_var = StringVar()
 
         sda_title = Label(
             self.root,
@@ -53,21 +54,23 @@ class SDACourseTrackingSystem:
         user_type = Label(
             data_frame_left,
             bg="mediumpurple4",
-            text="User type:  ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            text="User Type",
+            padx=10,
+            pady=15,
         )
-
         user_type.grid(row=0, column=0, sticky=W)
 
-        txt_user_type = Entry(
+        com_user_type = ttk.Combobox(
             data_frame_left,
-            font=("arial", 12, "bold"),
             textvariable=self.user_var,
-            width=27,
+            state="readonly",
+            font=("arial", 12, "bold"),
+            width=25,
         )
-        txt_user_type.grid(row=0, column=1)
+        com_user_type["value"] = ("Student", "Admin", "Trainer")
+        com_user_type.current(0)
+        com_user_type.grid(row=0, column=1)
 
         # Prompt user first name
         student_first_name = Label(
@@ -75,8 +78,8 @@ class SDACourseTrackingSystem:
             bg="mediumpurple4",
             text="First name: ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            padx=10,
+            pady=15,
         )
 
         student_first_name.grid(row=1, column=0, sticky=W)
@@ -95,8 +98,8 @@ class SDACourseTrackingSystem:
             bg="mediumpurple4",
             text="Last name: ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            padx=10,
+            pady=15,
         )
 
         student_last_name.grid(row=2, column=0, sticky=W)
@@ -115,8 +118,8 @@ class SDACourseTrackingSystem:
             bg="mediumpurple4",
             text="Course name: ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            padx=10,
+            pady=15,
         )
 
         sda_course_name.grid(row=3, column=0, sticky=W)
@@ -130,45 +133,61 @@ class SDACourseTrackingSystem:
         txt_sda_course_name.grid(row=3, column=1)
 
         # Course Module autofill
-        student_module = Label(
+        course_module = Label(
             data_frame_left,
             bg="mediumpurple4",
             text="Course module: ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            padx=10,
+            pady=15,
         )
 
-        student_module.grid(row=0, column=2, sticky=W)
+        course_module.grid(row=0, column=2, sticky=W)
 
-        txt_student_module = Entry(
+        txt_course_module = Entry(
             data_frame_left,
             font=("arial", 12, "bold"),
             textvariable=self.course_module_var,
             width=27,
         )
-        txt_student_module.grid(row=0, column=3)
+        txt_course_module.grid(row=0, column=3)
 
-        # Prompt date of studying
+        # Date of studying autofill
         study_date = Label(
             data_frame_left,
             bg="mediumpurple4",
             text="Study date: ",
             font=("arial", 12, "bold"),
-            padx=2,
-            pady=6,
+            padx=10,
+            pady=15,
         )
 
         study_date.grid(row=1, column=2, sticky=W)
-        # date_format = Label(data_frame_left, text="dd/mm/yyyy", bg="mediumpurple4",
-        #                     bd=20, font=("arial", 25, "bold"), pady=0)
-        # date_format.grid(row=2, column=3, pady=0, sticky="n")
-
         txt_study_date = Entry(data_frame_left,
                                font=("arial", 12, "bold"),
-                               textvariable=self.study_date,
+                               textvariable=self.study_date_var,
                                width=27)
         txt_study_date.grid(row=1, column=3)
+
+        # Hours studied
+        hours_studied = Label(
+            data_frame_left,
+            bg="mediumpurple4",
+            text="Hours Studied: ",
+            font=("arial", 12, "bold"),
+            padx=10,
+            pady=15,
+        )
+
+        hours_studied.grid(row=2, column=2, sticky=W)
+
+        txt_hours_studied = Entry(
+            data_frame_left,
+            font=("arial", 12, "bold"),
+            textvariable=self.study_hours_var,
+            width=27,
+        )
+        txt_hours_studied.grid(row=2, column=3)
 
         # ================================ Data Frame Right ==================================
 
@@ -214,14 +233,83 @@ class SDACourseTrackingSystem:
             "Final project",
         ]
 
-    # def select_module(event=''):
-    #     value = str(list_box.get(list_box.curselection()))
-    #     x = value
-    #     if ()
+        def select_module(event=''):
+            value = str(list_box.get(list_box.curselection()))
+            x = value
+            if x == "Python Developer - introduction":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Python Developer - introduction")
+                self.study_date_var.set(d1)
+
+            elif x == "Python - the basics":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Python - the basics")
+                self.study_date_var.set(d1)
+
+            elif x == "Git system":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Git system")
+                self.study_date_var.set(d1)
+
+            elif x == "Python - technology":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Python - technology")
+                self.study_date_var.set(d1)
+
+            elif x == "Software testing and TDD":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Software testing and TDD")
+                self.study_date_var.set(d1)
+
+            elif x == "Python - intermediate":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Python - intermediate")
+                self.study_date_var.set(d1)
+
+            elif x == "Algorithms and data structures":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Algorithms and data structures")
+                self.study_date_var.set(d1)
+
+            elif x == "Design patterns and good practices":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Design patterns and good practices")
+                self.study_date_var.set(d1)
+
+            elif x == "SQL databases":
+                d1 = datetime.date.today()
+                self.course_module_var.set("SQL databases")
+                self.study_date_var.set(d1)
+
+            elif x == "Databases - programming":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Databases - programming")
+                self.study_date_var.set(d1)
+
+            elif x == "HTTP basics":
+                d1 = datetime.date.today()
+                self.course_module_var.set("HTTP basics")
+                self.study_date_var.set(d1)
+
+            elif x == "HTML,CSS,JavaScript":
+                d1 = datetime.date.today()
+                self.course_module_var.set("HTML,CSS,JavaScript")
+                self.study_date_var.set(d1)
+
+            elif x == "Backend technologies":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Backend technologies")
+                self.study_date_var.set(d1)
+
+            elif x == "Final project":
+                d1 = datetime.date.today()
+                self.course_module_var.set("Final project")
+                self.study_date_var.set(d1)
 
         list_box = Listbox(
             data_frame_right, font=("arial", 10, "bold"), width=26, height=18
         )
+        list_box.bind("<<ListboxSelect>>", select_module)
         list_box.grid(row=0, column=0, padx=4)
         list_scroll_bar.config(command=list_box.yview)
 
@@ -314,6 +402,7 @@ class SDACourseTrackingSystem:
                 "coursename",
                 "coursemodule",
                 "studydate",
+                "studyhours"
             ),
             xscrollcommand=xscroll.set,
             yscrollcommand=yscroll.set,
@@ -331,6 +420,7 @@ class SDACourseTrackingSystem:
         self.sda_table.heading("coursename", text="Course Name")
         self.sda_table.heading("coursemodule", text="Course Module")
         self.sda_table.heading("studydate", text="Study Date")
+        self.sda_table.heading("studyhours", text="Hours Studied")
 
         self.sda_table["show"] = "headings"
         self.sda_table.pack(fill=BOTH, expand=1)
@@ -341,6 +431,9 @@ class SDACourseTrackingSystem:
         self.sda_table.column("coursename", width=100)
         self.sda_table.column("coursemodule", width=100)
         self.sda_table.column("studydate", width=100)
+        self.sda_table.column("studyhours", width=100)
+
+        self.fetch_data()
 
     def add_data(self):
         connection = mysql.connector.Connect(
@@ -348,19 +441,41 @@ class SDACourseTrackingSystem:
         )
         my_cursor = connection.cursor()
         my_cursor.execute(
-            "insert into library values(%s, %s, %s, %s, %s, %s)", (
+            "insert into library values(%s, %s, %s, %s, %s, %s, %s)", (
                                                                     self.user_var.get(),
                                                                     self.first_name_var.get(),
                                                                     self.last_name_var.get(),
                                                                     self.course_name_var.get(),
                                                                     self.course_module_var.get(),
-                                                                    self.study_date.get()
+                                                                    self.study_date_var.get(),
+                                                                    self.study_hours_var.get()
                                                                 ))
 
         connection.commit()
+        self.fetch_data()
         connection.close()
 
         messagebox.showinfo("Success", "User was inserted successfully")
+
+    def fetch_data(self):
+        connection = mysql.connector.connect(host="localhost", username="root", password="newPass", database="practice")
+        my_cursor = connection.cursor()
+        my_cursor.execute("select * from library")
+        rows = my_cursor.fetchall()
+
+        if len(rows) != 0:
+            self.sda_table.delete(*self.sda_table.get_children())
+            for i in rows:
+                self.sda_table.insert("", END, values=i)
+            connection.commit()
+        connection.close()
+
+    def get_cursor(self):
+        cursor_row = self.sda_table.focus()
+        content = self.sda_table.item(cursor_row)
+        row = content['values']
+
+        self.user_var.set(row[0])
 
 
 if __name__ == "__main__":
