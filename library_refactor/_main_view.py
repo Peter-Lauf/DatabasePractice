@@ -5,6 +5,8 @@ from tkinter import messagebox
 import frames_widgets
 from student_data import StudentData
 
+
+# Main root window is launched from here
 class MainFrame(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -28,7 +30,8 @@ class MainFrame(tk.Tk):
 
         self.frame = Frame(self, bd=15, relief=RIDGE, padx=20, bg="mediumpurple4")
         self.frame.place(x=0, y=130, width=1550, height=400)
-        self.data = StudentData()
+        self.data = StudentData(self)
+
 
 if __name__ == "__main__":
     root = MainFrame()

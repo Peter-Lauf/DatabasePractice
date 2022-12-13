@@ -5,6 +5,8 @@ from tkinter import messagebox
 import db_helper
 import datetime
 
+
+# -------- Right Frame -------- #
 class RightFrame(ttk.Frame):
     def __init__(self, container, data):
         super().__init__(container)
@@ -67,24 +69,22 @@ class RightFrameWidgets(RightFrame):
         for item in self.list_modules:
             self.list_box.insert(END, item)
 
-
-    def select_module(self, event= ''):
+    def select_module(self, event=""):
         choice = str(self.list_box.get(self.list_box.curselection()))
         self.set_module(choice)
-
 
     def set_module(self, choice):
         d1 = datetime.date.today()
         self.data.course_module_var.set(f"{choice}")
-        self.data.study_date.set(d1)
+        self.data.study_date.set(d1.strftime("%m/%d/%Y"))
 
 
+# -------- Left Frame -------- #
 class LeftFrame(ttk.Frame):
     def __init__(self, container, data):
         super().__init__(container)
 
         self.data = data
-        self.data.user_var = 'No_var'
         self.data_frame_left = LabelFrame(
             container,
             text="Student Details".upper(),
@@ -140,7 +140,6 @@ class LeftFrameWidgets(LeftFrame):
         self.txt_student_first_name = Entry(
             self.data_frame_left,
             font=("arial", 12, "bold"),
-            textvariable=self.data.first_name,
             width=27,
         )
         self.txt_student_first_name.grid(row=1, column=1)
@@ -160,7 +159,6 @@ class LeftFrameWidgets(LeftFrame):
         self.txt_student_last_name = Entry(
             self.data_frame_left,
             font=("arial", 12, "bold"),
-            textvariable=self.data.last_name,
             width=27,
         )
         self.txt_student_last_name.grid(row=2, column=1)
@@ -180,7 +178,6 @@ class LeftFrameWidgets(LeftFrame):
         self.txt_sda_course_name = Entry(
             self.data_frame_left,
             font=("arial", 12, "bold"),
-            textvariable=self.data.course_name_var,
             width=27,
         )
         self.txt_sda_course_name.grid(row=3, column=1)
@@ -216,10 +213,13 @@ class LeftFrameWidgets(LeftFrame):
         )
 
         self.study_date.grid(row=1, column=2, sticky=W)
-        self.txt_study_date = Entry(self.data_frame_left,
-                               font=("arial", 12, "bold"),
-                               textvariable=self.data.study_date,
-                               width=27)
+
+        self.txt_study_date = Entry(
+            self.data_frame_left,
+            font=("arial", 12, "bold"),
+            textvariable=self.data.study_date,
+            width=27,
+        )
         self.txt_study_date.grid(row=1, column=3)
 
         # Hours studied
@@ -237,12 +237,12 @@ class LeftFrameWidgets(LeftFrame):
         self.txt_hours_studied = Entry(
             self.data_frame_left,
             font=("arial", 12, "bold"),
-            textvariable=self.data.study_hours,
             width=27,
         )
         self.txt_hours_studied.grid(row=2, column=3)
 
 
+# -------- Buttons Frame -------- #
 class ButtonsFrame(ttk.Frame):
     def __init__(self, container, data):
         super().__init__(container)
@@ -255,9 +255,10 @@ class ButtonsFrame(ttk.Frame):
 
 
 class ButtonsWidgets(ButtonsFrame):
-    def __init__(self, container, data):
+    def __init__(self, container, data, left_frame_widgets):
         ButtonsFrame.__init__(self, container, data)
 
+        self.left_frame = left_frame_widgets
         self.button_add_data = Button(
             self.frame_button,
             command=self.write_to_db,
@@ -319,18 +320,20 @@ class ButtonsWidgets(ButtonsFrame):
         )
         self.button_add_data.grid(row=0, column=5, padx=3, pady=7)
 
-
     def write_to_db(self):
         db_helper.create_tables()
-        print(self.data.user_var)
         db_helper.write_data_to_db(
-            self.data.user_var, self.data.first_name,
-            self.data.last_name, self.data.study_hours,
-            self.data.study_date, self.data.course_name_var,
-            self.data.course_module_var
+            self.left_frame.com_user_type.get(),
+            self.left_frame.txt_student_first_name.get(),
+            self.left_frame.txt_student_last_name.get(),
+            self.left_frame.txt_hours_studied.get(),
+            self.data.study_date.get(),
+            self.left_frame.txt_sda_course_name.get(),
+            self.data.course_module_var.get(),
         )
 
 
+# -------- Bottom & Table Frame -------- #
 class BottomFrame(ttk.Frame):
     def __init__(self, container, data):
         super().__init__(container)
@@ -365,7 +368,7 @@ class TableWidgets(TableFrame):
                 "coursename",
                 "coursemodule",
                 "studydate",
-                "studyhours"
+                "studyhours",
             ),
             xscrollcommand=self.xscroll.set,
             yscrollcommand=self.yscroll.set,
@@ -397,6 +400,8 @@ class TableWidgets(TableFrame):
         self.sda_table.column("studyhours", width=100)
 
 
+# Create all the above widgets
+# Function is called from _main_view.py
 def create_frames_widgets(root):
 
     left_frame = LeftFrame(root, root.data)
@@ -406,14 +411,20 @@ def create_frames_widgets(root):
     right_frame_widgets = RightFrameWidgets(root, root.data)
 
     buttons_frame = ButtonsFrame(root, root.data)
-    buttons_widgets = ButtonsWidgets(root, root.data)
+    buttons_widgets = ButtonsWidgets(root, root.data, left_frame_widgets)
 
     bottom_frame = BottomFrame(root, root.data)
     table_frame = TableFrame(root, root.data)
     table_widgets = TableWidgets(root, root.data)
 
     return (
-        left_frame, left_frame_widgets, right_frame,
-        right_frame_widgets, buttons_frame, buttons_widgets,
-        bottom_frame, table_frame, table_widgets
+        left_frame,
+        left_frame_widgets,
+        right_frame,
+        right_frame_widgets,
+        buttons_frame,
+        buttons_widgets,
+        bottom_frame,
+        table_frame,
+        table_widgets,
     )

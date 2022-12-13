@@ -1,14 +1,15 @@
 import tkinter as tk
 
+
 class StudentData:
-    def __init__(self):
-        self._user_var = tk.StringVar()
-        self._first_name = tk.StringVar()
-        self._last_name = tk.StringVar()
-        self._study_hours = tk.StringVar()
-        self._study_date = tk.StringVar()
-        self._course_name_var = tk.StringVar()
-        self._course_module_var = tk.StringVar()
+    def __init__(self, root):
+        self._user_var = tk.StringVar(root)
+        self._first_name = tk.StringVar(root)
+        self._last_name = tk.StringVar(root)
+        self._study_hours = tk.StringVar(root)
+        self._study_date = tk.StringVar(root)
+        self._course_name_var = tk.StringVar(root)
+        self._course_module_var = tk.StringVar(root)
 
     @property
     def user_var(self):
